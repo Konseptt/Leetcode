@@ -1,18 +1,12 @@
 impl Solution {
     pub fn longest_subarray(nums: Vec<i32>) -> i32 {
         let mx = *nums.iter().max().unwrap();
-        let mut ans = 0;
-        let mut cnt = 0;
-        
-        for &v in nums.iter() {
+        nums.iter().fold((0, 0), |(ans, cnt), &v| {
             if v == mx {
-                cnt += 1;
-                ans = ans.max(cnt);
+                (ans.max(cnt + 1), cnt + 1)
             } else {
-                cnt = 0;
+                (ans, 0)
             }
-        }
-        
-        ans
+        }).0
     }
 }
