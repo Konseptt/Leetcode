@@ -1,12 +1,15 @@
 impl Solution {
     pub fn make_fancy_string(s: String) -> String {
-        let mut ans = Vec::with_capacity(s.len());
+        let mut ans = String::with_capacity(s.len());
+        let mut prev1 = '\0';
+        let mut prev2 = '\0';
         for c in s.chars() {
-            let n = ans.len();
-            if n < 2 || c != ans[n - 1] || c != ans[n - 2] {
+            if c != prev1 || c != prev2 {
                 ans.push(c);
+                prev2 = prev1;
+                prev1 = c;
             }
         }
-        ans.into_iter().collect()
+        ans
     }
 }
