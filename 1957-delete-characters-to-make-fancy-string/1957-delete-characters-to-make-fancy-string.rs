@@ -1,17 +1,17 @@
 impl Solution {
-    pub fn make_fancy_string(mut s: String) -> String {
-        unsafe {
-            let bytes = s.as_bytes_mut();
-            let mut write = 0;
-            for read in 0..bytes.len() {
-                if write >= 2 && bytes[read] == bytes[write - 1] && bytes[read] == bytes[write - 2] {
-                    continue;
-                }
-                bytes[write] = bytes[read];
-                write += 1;
+    pub fn make_fancy_string(s: String) -> String {
+        let mut result = String::with_capacity(s.len());
+        let mut prev1 = '\0';
+        let mut prev2 = '\0';
+        
+        for c in s.chars() {
+            if c != prev1 || c != prev2 {
+                result.push(c);
+                prev2 = prev1;
+                prev1 = c;
             }
-            s.truncate(write);
         }
-        s
+        
+        result
     }
 }
