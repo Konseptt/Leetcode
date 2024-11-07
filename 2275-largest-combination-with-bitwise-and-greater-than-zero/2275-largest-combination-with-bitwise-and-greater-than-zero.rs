@@ -1,13 +1,9 @@
 impl Solution {
     pub fn largest_combination(candidates: Vec<i32>) -> i32 {
-        let mut max_count = 0;
+        let mut ans = 0;
         for i in 0..32 {
-            let mut count = 0;
-            for &x in candidates.iter() {
-                count += ((x >> i) & 1) as i32;
-            }
-            max_count = max_count.max(count);
+            ans = ans.max(candidates.iter().fold(0, |c, &x| c + ((x >> i) & 1) as i32));
         }
-        max_count
+        ans
     }
 }
