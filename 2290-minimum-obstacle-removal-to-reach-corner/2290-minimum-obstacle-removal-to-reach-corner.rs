@@ -1,23 +1,29 @@
+use std::collections::BinaryHeap;
+use std::cmp::Reverse;
+
 impl Solution {
     pub fn minimum_obstacles(grid: Vec<Vec<i32>>) -> i32 {
         let m = grid.len();
         let n = grid[0].len();
         
-        let mut queue = std::collections::VecDeque::new();
-        
         let mut dist = vec![vec![i32::MAX; n]; m];
+        let mut heap = BinaryHeap::new();
+        
+        heap.push(Reverse((0, 0, 0)));
+        dist[0][0] = 0;
         
         let dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)];
         
-        queue.push_back((0, 0, 0));
-        dist[0][0] = 0;
-        
-        while let Some((x, y, obstacles)) = queue.pop_front() {
+        while let Some(Reverse((obstacles, x, y))) = heap.pop() {
             if x == m - 1 && y == n - 1 {
                 return obstacles;
             }
             
-            for (dx, dy) in dirs.iter() {
+            if obstacles > dist[x][y] {
+                continue;
+            }
+            
+            for (dx, dy) in dirs {
                 let nx = x as i32 + dx;
                 let ny = y as i32 + dy;
                 
@@ -27,12 +33,7 @@ impl Solution {
                     
                     if new_obstacles < dist[nx][ny] {
                         dist[nx][ny] = new_obstacles;
-                        
-                        if grid[nx][ny] == 0 {
-                            queue.push_front((nx, ny, new_obstacles));
-                        } else {
-                            queue.push_back((nx, ny, new_obstacles));
-                        }
+                        heap.push(Reverse((new_obstacles, nx, ny)));
                     }
                 }
             }
